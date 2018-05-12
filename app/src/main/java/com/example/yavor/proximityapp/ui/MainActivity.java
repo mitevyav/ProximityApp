@@ -1,4 +1,4 @@
-package com.example.yavor.proximityapp;
+package com.example.yavor.proximityapp.ui;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.example.yavor.proximityapp.R;
 import com.example.yavor.proximityapp.location.LocationManager;
 import com.example.yavor.proximityapp.location.LocationManagerImpl;
 import com.example.yavor.proximityapp.places.PlacesManager;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
                                                         "1500",
                                                         "restaurant",
                                                         "AIzaSyCV_JQdRwDBkBXTx7sIiRLYfC6Q1KoYoWs"));
-        locationManager = new LocationManagerImpl(this, this);
+        locationManager = new LocationManagerImpl(this, getApplicationContext());
     }
 
     @Override
