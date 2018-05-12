@@ -6,12 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PlacesResult {
+public class PlacesInfo {
 
     @JsonProperty("results")
     List<Place> places;
 
-    public List<Place> getResults() {
+    public List<Place> getPlaces() {
         return places;
     }
 }

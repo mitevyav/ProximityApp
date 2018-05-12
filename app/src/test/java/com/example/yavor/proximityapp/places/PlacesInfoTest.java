@@ -6,7 +6,7 @@ import junit.framework.TestCase;
 
 import java.io.IOException;
 
-public class PlacesResultTest extends TestCase {
+public class PlacesInfoTest extends TestCase {
 
     public static final String SOURCE_JSON = "{\n" +
                                              "   \"html_attributions\" : [],\n" +
@@ -62,11 +62,11 @@ public class PlacesResultTest extends TestCase {
                                              "   \"status\" : \"OK\"\n" +
                                              "}";
 
-    public void testGetResults() throws IOException {
+    public void testGetPlaces() throws IOException {
 
-        PlacesResult result =
-                new ObjectMapper().readerFor(PlacesResult.class).readValue(SOURCE_JSON);
-        Place place = result.getResults().get(0);
+        PlacesInfo result =
+                new ObjectMapper().readerFor(PlacesInfo.class).readValue(SOURCE_JSON);
+        Place place = result.getPlaces().get(0);
 
         assertEquals(place.getLatitude(), -33.8609472, 0.005);
         assertEquals(place.getLongitude(), 151.209872, 0.005);
