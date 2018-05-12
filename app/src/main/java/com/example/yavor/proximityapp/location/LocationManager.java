@@ -1,4 +1,4 @@
-package com.example.yavor.proximityapp.managers;
+package com.example.yavor.proximityapp.location;
 
 public interface LocationManager {
 

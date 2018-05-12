@@ -1,4 +1,4 @@
-package com.example.yavor.proximityapp.managers;
+package com.example.yavor.proximityapp.location;
 
 import android.Manifest;
 import android.arch.lifecycle.Lifecycle;

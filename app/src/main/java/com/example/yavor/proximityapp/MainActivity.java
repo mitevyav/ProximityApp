@@ -8,8 +8,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.example.yavor.proximityapp.managers.LocationManager;
-import com.example.yavor.proximityapp.managers.LocationManagerImpl;
+import com.example.yavor.proximityapp.location.LocationManager;
+import com.example.yavor.proximityapp.location.LocationManagerImpl;
 
 public class MainActivity extends AppCompatActivity {
 
