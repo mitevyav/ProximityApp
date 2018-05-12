@@ -1,19 +1,12 @@
-package com.example.yavor.proximityapp;
+package com.example.yavor.proximityapp.places;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.example.yavor.proximityapp.location.LocationManager;
-import com.example.yavor.proximityapp.location.LocationManagerImpl;
+import junit.framework.TestCase;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.IOException;
 
-    private static final String TAG = "MainActivity";
+public class PlacesResultTest extends TestCase {
 
     public static final String SOURCE_JSON = "{\n" +
                                              "   \"html_attributions\" : [],\n" +
@@ -69,48 +62,14 @@ public class MainActivity extends AppCompatActivity {
                                              "   \"status\" : \"OK\"\n" +
                                              "}";
 
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 505;
+    public void testGetResults() throws IOException {
 
-    private LocationManager locationManager;
+        PlacesResult result =
+                new ObjectMapper().readerFor(PlacesResult.class).readValue(SOURCE_JSON);
+        Place place = result.getResults().get(0);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        locationManager = new LocationManagerImpl(this, this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume");
-        checkPermissions();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[],
-                                           int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                if (grantResults.length > 0 &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    locationManager.startLocationUpdates();
-                } else {
-
-                }
-                return;
-            }
-        }
-    }
-
-    private void checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-            PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                                              new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
-                                              PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
+        assertEquals(place.getLatitude(), -33.8609472, 0.005);
+        assertEquals(place.getLongitude(), 151.209872, 0.005);
+        assertEquals(place.getName(), "Australian Cruise Group Circular Quay");
     }
 }
