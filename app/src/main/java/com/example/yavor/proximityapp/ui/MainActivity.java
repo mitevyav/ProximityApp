@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -20,6 +21,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 505;
 
+    FragmentPagerAdapter fragmentPagerAdapter;
+
+    ViewPager viewPager;
+
     private LocationManager locationManager;
 
     @Override
@@ -31,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
                                                         "restaurant",
                                                         "AIzaSyCV_JQdRwDBkBXTx7sIiRLYfC6Q1KoYoWs"));
         locationManager = new LocationManagerImpl(this, getApplicationContext());
+
+        fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager(),
+                                                        getApplicationContext());
+        viewPager = findViewById(R.id.pager);
+        viewPager.setAdapter(fragmentPagerAdapter);
+
     }
 
     @Override
