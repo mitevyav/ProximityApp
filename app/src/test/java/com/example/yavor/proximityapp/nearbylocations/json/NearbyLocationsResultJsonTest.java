@@ -1,4 +1,4 @@
-package com.example.yavor.proximityapp.places.json;
+package com.example.yavor.proximityapp.nearbylocations.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -6,7 +6,7 @@ import junit.framework.TestCase;
 
 import java.io.IOException;
 
-public class PlacesInfoJsonTest extends TestCase {
+public class NearbyLocationsResultJsonTest extends TestCase {
 
     public static final String SOURCE_JSON = "{\n" +
                                              "   \"html_attributions\" : [],\n" +
@@ -64,12 +64,13 @@ public class PlacesInfoJsonTest extends TestCase {
 
     public void testGetPlaces() throws IOException {
 
-        PlacesInfoJson result = new ObjectMapper().readerFor(PlacesInfoJson.class).readValue(
+        NearbyLocationsResultJson
+                result = new ObjectMapper().readerFor(NearbyLocationsResultJson.class).readValue(
                 SOURCE_JSON);
-        PlaceJson placeJson = result.getPlacesJson().get(0);
+        NearbyLocationJson nearbyLocationJson = result.getPlacesJson().get(0);
 
-        assertEquals(placeJson.getLatitude(), -33.8609472, 0.005);
-        assertEquals(placeJson.getLongitude(), 151.209872, 0.005);
-        assertEquals(placeJson.getName(), "Australian Cruise Group Circular Quay");
+        assertEquals(nearbyLocationJson.getLatitude(), -33.8609472, 0.005);
+        assertEquals(nearbyLocationJson.getLongitude(), 151.209872, 0.005);
+        assertEquals(nearbyLocationJson.getName(), "Australian Cruise Group Circular Quay");
     }
 }

@@ -1,4 +1,4 @@
-package com.example.yavor.proximityapp.location;
+package com.example.yavor.proximityapp.devicelocation;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -28,9 +28,9 @@ import com.google.android.gms.tasks.Task;
 import java.util.concurrent.TimeUnit;
 
 @SuppressLint("MissingPermission")
-public class LocationManagerImpl implements LocationManager {
+public class DeviceLocationManagerImpl implements CurrentLocationManager {
 
-    private static final String TAG = "LocationManagerImpl";
+    private static final String TAG = "DeviceLocationManagerImpl";
 
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 505;
 
@@ -48,11 +48,11 @@ public class LocationManagerImpl implements LocationManager {
 
     private Location lastLocation;
 
-    private LocationChangedListener listener;
+    private DeviceLocationChangedListener listener;
 
     private LocationRequest locationRequest;
 
-    public LocationManagerImpl(Context context, LocationChangedListener listener) {
+    public DeviceLocationManagerImpl(Context context, DeviceLocationChangedListener listener) {
         this.listener = listener;
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
         createLocationRequest();

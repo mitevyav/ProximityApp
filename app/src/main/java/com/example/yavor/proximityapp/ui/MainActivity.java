@@ -10,22 +10,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.yavor.proximityapp.R;
-import com.example.yavor.proximityapp.location.LocationChangedListener;
-import com.example.yavor.proximityapp.location.LocationManager;
-import com.example.yavor.proximityapp.location.LocationManagerImpl;
-import com.example.yavor.proximityapp.places.PlacesRestManager;
-import com.example.yavor.proximityapp.places.QueryParams;
+import com.example.yavor.proximityapp.devicelocation.DeviceLocationChangedListener;
+import com.example.yavor.proximityapp.devicelocation.CurrentLocationManager;
+import com.example.yavor.proximityapp.devicelocation.DeviceLocationManagerImpl;
+import com.example.yavor.proximityapp.nearbylocations.NearbyLocationsRestManager;
+import com.example.yavor.proximityapp.nearbylocations.QueryParams;
 
-import static com.example.yavor.proximityapp.location.LocationManagerImpl.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
-import static com.example.yavor.proximityapp.location.LocationManagerImpl.REQUEST_CHECK_SETTINGS;
+import static com.example.yavor.proximityapp.devicelocation.DeviceLocationManagerImpl.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
+import static com.example.yavor.proximityapp.devicelocation.DeviceLocationManagerImpl.REQUEST_CHECK_SETTINGS;
 
-public class MainActivity extends AppCompatActivity implements LocationChangedListener {
+public class MainActivity extends AppCompatActivity implements DeviceLocationChangedListener {
 
     private static final String TAG = "MainActivity";
 
     private FragmentPagerAdapter fragmentPagerAdapter;
 
-    private LocationManager locationManager;
+    private CurrentLocationManager locationManager;
 
     private ViewPager viewPager;
 
@@ -88,16 +88,16 @@ public class MainActivity extends AppCompatActivity implements LocationChangedLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        new PlacesRestManager().makeRequest(new QueryParams("-33.8670522,151.1957362",
-                                                            "1500",
-                                                            "restaurant",
-                                                            "AIzaSyCV_JQdRwDBkBXTx7sIiRLYfC6Q1KoYoWs"));
+        new NearbyLocationsRestManager().makeRequest(new QueryParams("-33.8670522,151.1957362",
+                                                                     "1500",
+                                                                     "restaurant",
+                                                                     "AIzaSyCV_JQdRwDBkBXTx7sIiRLYfC6Q1KoYoWs"));
 
         fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager(),
                                                         getApplicationContext());
         viewPager = findViewById(R.id.pager);
         viewPager.setAdapter(fragmentPagerAdapter);
 
-        locationManager = new LocationManagerImpl(getApplicationContext(), this);
+        locationManager = new DeviceLocationManagerImpl(getApplicationContext(), this);
     }
 }

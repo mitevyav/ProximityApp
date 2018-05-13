@@ -1,4 +1,4 @@
-package com.example.yavor.proximityapp.places;
+package com.example.yavor.proximityapp.nearbylocations;
 
 public class QueryParams {
 

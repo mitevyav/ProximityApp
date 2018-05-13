@@ -1,4 +1,4 @@
-package com.example.yavor.proximityapp.places.json;
+package com.example.yavor.proximityapp.nearbylocations.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,12 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PlacesInfoJson {
+public class NearbyLocationsResultJson {
 
     @JsonProperty("results")
-    List<PlaceJson> placesJson;
+    List<NearbyLocationJson> placesJson;
 
-    public List<PlaceJson> getPlacesJson() {
+    public List<NearbyLocationJson> getPlacesJson() {
         return placesJson;
     }
 }
