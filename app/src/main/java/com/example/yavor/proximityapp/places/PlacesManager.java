@@ -2,23 +2,26 @@ package com.example.yavor.proximityapp.places;
 
 import android.util.Log;
 
+import com.example.yavor.proximityapp.places.json.PlaceJson;
+import com.example.yavor.proximityapp.places.json.PlacesInfoJson;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
-public class PlacesManager implements Callback<PlacesInfo> {
+public class PlacesManager implements Callback<PlacesInfoJson> {
 
     private static final String TAG = "PlacesManager";
 
     @Override
-    public void onResponse(Call<PlacesInfo> call, Response<PlacesInfo> response) {
+    public void onResponse(Call<PlacesInfoJson> call, Response<PlacesInfoJson> response) {
         Log.d(TAG, "onResponse");
         if (response.isSuccessful()) {
-            PlacesInfo placesInfo = response.body();
-            for (Place place : placesInfo.getPlaces()) {
-                Log.d(TAG, "place - " + place.toString());
+            PlacesInfoJson placesInfoJson = response.body();
+            for (PlaceJson placeJson : placesInfoJson.getPlacesJson()) {
+                Log.d(TAG, "placeJson - " + placeJson.toString());
             }
         } else {
             Log.d(TAG, "response.errorBody - " + response.errorBody());
@@ -26,7 +29,7 @@ public class PlacesManager implements Callback<PlacesInfo> {
     }
 
     @Override
-    public void onFailure(Call<PlacesInfo> call, Throwable t) {
+    public void onFailure(Call<PlacesInfoJson> call, Throwable t) {
         Log.d(TAG, "onFailure");
         t.printStackTrace();
     }
@@ -39,10 +42,10 @@ public class PlacesManager implements Callback<PlacesInfo> {
 
         PlacesService service = retrofit.create(PlacesService.class);
 
-        Call<PlacesInfo> call = service.getPlacesInfo(queryParams.getLocation(),
-                                                      queryParams.getRadius(),
-                                                      queryParams.getType(),
-                                                      queryParams.getKey());
+        Call<PlacesInfoJson> call = service.getPlacesInfo(queryParams.getLocation(),
+                                                          queryParams.getRadius(),
+                                                          queryParams.getType(),
+                                                          queryParams.getKey());
 
         call.enqueue(this);
     }

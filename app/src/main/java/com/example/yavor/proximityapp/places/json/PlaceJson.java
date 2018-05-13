@@ -1,4 +1,4 @@
-package com.example.yavor.proximityapp.places;
+package com.example.yavor.proximityapp.places.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Place {
+public class PlaceJson {
 
     private double latitude;
 
@@ -28,7 +28,7 @@ public class Place {
 
     @Override
     public String toString() {
-        return "Place{" +
+        return "PlaceJson{" +
                "latitude=" +
                latitude +
                ", longitude=" +
