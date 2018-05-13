@@ -31,7 +31,7 @@ public class NearbyLocationTransformer {
             return;
         }
         for (NearbyLocationJson locationJson : nearbyLocationJson) {
-            float distance = getDistance(locationJson);
+            int distance = getDistance(locationJson);
             NearbyLocation location = new NearbyLocation(distance,
                                                          locationJson.getLatitude(),
                                                          locationJson.getLongitude(),
@@ -47,9 +47,9 @@ public class NearbyLocationTransformer {
         return location;
     }
 
-    private float getDistance(NearbyLocationJson nearbyLocationJson) {
+    private int getDistance(NearbyLocationJson nearbyLocationJson) {
         Location location = getLocationObject(nearbyLocationJson);
-        return location.distanceTo(currentLocation);
+        return (int) location.distanceTo(currentLocation);
     }
 
 }

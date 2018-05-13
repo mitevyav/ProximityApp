@@ -34,6 +34,9 @@ public class NearbyLocationsViewModel extends ViewModel implements DeviceLocatio
 
     public void setQueryParams(QueryParams queryParams) {
         this.queryParams = queryParams;
+        if (locationsLiveData != null) {
+            locationsLiveData.setValue(Collections.<NearbyLocation>emptyList());
+        }
     }
 
     public MutableLiveData<List<NearbyLocation>> getLocations() {

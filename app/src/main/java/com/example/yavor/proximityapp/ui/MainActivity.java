@@ -136,8 +136,8 @@ public class MainActivity extends AppCompatActivity {
 
         viewModel.setDeviceLocationManager(new DeviceLocationManagerImpl(getApplication(),
                                                                          viewModel));
-        setQueryParams();
         viewModel.setRestManager(new NearbyLocationsRestManager(viewModel));
+        setQueryParams();
     }
 
     private void setQueryParams() {

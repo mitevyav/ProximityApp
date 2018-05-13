@@ -2,7 +2,7 @@ package com.example.yavor.proximityapp.nearbylocations;
 
 public class NearbyLocation {
 
-    private float distance;
+    private int distance;
 
     private double latitude;
 
@@ -10,7 +10,7 @@ public class NearbyLocation {
 
     private String name;
 
-    public NearbyLocation(float distance, double latitude, double longitude, String name) {
+    public NearbyLocation(int distance, double latitude, double longitude, String name) {
         this.distance = distance;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -32,7 +32,7 @@ public class NearbyLocation {
                '}';
     }
 
-    public float getDistance() {
+    public int getDistance() {
 
         return distance;
     }
