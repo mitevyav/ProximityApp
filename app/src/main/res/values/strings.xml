@@ -5,9 +5,5 @@
     <string name="preferences_label">Preferences</string>
     <string name="settings_label">Settings</string>
     <string name="api_key">AIzaSyCV_JQdRwDBkBXTx7sIiRLYfC6Q1KoYoWs</string>
-    <string name="pref_label_distance">Distance</string>
-    <string name="pref_label_type">Type</string>
-    <string name="distance_summary">Distance (in meters) within which to return place results.</string>
-    <string name="distance_hint">distance in meters</string>
-    <string name="distance_pref_summary">%1$s meters</string>
+
 </resources>

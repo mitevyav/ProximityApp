@@ -17,6 +17,7 @@ import com.example.yavor.proximityapp.devicelocation.DeviceLocationManagerImpl;
 import com.example.yavor.proximityapp.nearbylocations.restapi.NearbyLocationsRestManager;
 import com.example.yavor.proximityapp.nearbylocations.restapi.QueryParams;
 import com.example.yavor.proximityapp.preferences.SettingsActivity;
+import com.example.yavor.proximityapp.utils.PreferenceUtils;
 
 import static com.example.yavor.proximityapp.devicelocation.DeviceLocationManagerImpl.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.example.yavor.proximityapp.devicelocation.DeviceLocationManagerImpl.REQUEST_CHECK_SETTINGS;
@@ -25,7 +26,11 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
+    private static final String UPDATE_QUERY_PARAMS_KEY = "UPDATE_QUERY_PARAMS_KEY";
+
     private FragmentPagerAdapter fragmentPagerAdapter;
+
+    private boolean isUpdateQueryParams = false;
 
     private NearbyLocationsViewModel viewModel;
 
@@ -81,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
+        if (isUpdateQueryParams) {
+            isUpdateQueryParams = false;
+            setQueryParams();
+        }
         viewModel.getDeviceLocationManager().start(this);
     }
 
@@ -104,6 +113,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (savedInstanceState != null) {
+            isUpdateQueryParams = savedInstanceState.getBoolean(UPDATE_QUERY_PARAMS_KEY);
+        }
+
         initViewModel();
 
         fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager(),
@@ -112,21 +125,33 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(fragmentPagerAdapter);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(UPDATE_QUERY_PARAMS_KEY, isUpdateQueryParams);
+    }
+
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(NearbyLocationsViewModel.class);
-        QueryParams queryParams = new QueryParams("-33.8670522,151.1957362",
-                                                  "1000",
-                                                  "restaurant",
-                                                  "AIzaSyCV_JQdRwDBkBXTx7sIiRLYfC6Q1KoYoWs");
 
         viewModel.setDeviceLocationManager(new DeviceLocationManagerImpl(getApplication(),
                                                                          viewModel));
-        viewModel.setQueryParams(queryParams);
+        setQueryParams();
         viewModel.setRestManager(new NearbyLocationsRestManager(viewModel));
     }
 
+    private void setQueryParams() {
+        QueryParams queryParams = new QueryParams("",
+                                                  PreferenceUtils.getDistance(this),
+                                                  PreferenceUtils.getType(this),
+                                                  getString(R.string.api_key));
+        viewModel.setQueryParams(queryParams);
+    }
+
     private void launchPreferences() {
+        isUpdateQueryParams = true;
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
+
 }

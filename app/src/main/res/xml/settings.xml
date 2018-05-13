@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <EditTextPreference
-        android:defaultValue="1500"
+        android:defaultValue="@string/pref_distance_default_value"
         android:hint="@string/distance_hint"
         android:key="@string/pref_key_distance"
-        android:summary="@string/distance_summary"
         android:title="@string/pref_label_distance"/>
     <ListPreference
-        android:defaultValue="restaurant"
+        android:defaultValue="@string/pref_type_default_value"
         android:entries="@array/types_array"
         android:entryValues="@array/types_array"
         android:key="@string/pref_key_type"
