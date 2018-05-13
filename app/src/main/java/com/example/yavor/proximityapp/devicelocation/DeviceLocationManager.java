@@ -2,7 +2,7 @@ package com.example.yavor.proximityapp.devicelocation;
 
 import android.app.Activity;
 
-public interface CurrentLocationManager {
+public interface DeviceLocationManager {
 
     void start(Activity activity);
 

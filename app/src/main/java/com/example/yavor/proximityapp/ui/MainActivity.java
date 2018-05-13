@@ -11,7 +11,7 @@ import android.util.Log;
 
 import com.example.yavor.proximityapp.R;
 import com.example.yavor.proximityapp.devicelocation.DeviceLocationChangedListener;
-import com.example.yavor.proximityapp.devicelocation.CurrentLocationManager;
+import com.example.yavor.proximityapp.devicelocation.DeviceLocationManager;
 import com.example.yavor.proximityapp.devicelocation.DeviceLocationManagerImpl;
 import com.example.yavor.proximityapp.nearbylocations.NearbyLocationsRestManager;
 import com.example.yavor.proximityapp.nearbylocations.QueryParams;
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements DeviceLocationCha
 
     private FragmentPagerAdapter fragmentPagerAdapter;
 
-    private CurrentLocationManager locationManager;
+    private DeviceLocationManager locationManager;
 
     private ViewPager viewPager;
 

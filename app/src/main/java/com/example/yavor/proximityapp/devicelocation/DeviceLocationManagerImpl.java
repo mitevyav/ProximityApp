@@ -28,7 +28,7 @@ import com.google.android.gms.tasks.Task;
 import java.util.concurrent.TimeUnit;
 
 @SuppressLint("MissingPermission")
-public class DeviceLocationManagerImpl implements CurrentLocationManager {
+public class DeviceLocationManagerImpl implements DeviceLocationManager {
 
     private static final String TAG = "DeviceLocationManagerImpl";
 
