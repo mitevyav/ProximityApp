@@ -40,17 +40,7 @@ public class LocationManagerImpl implements LocationManager {
 
     private static final long UPDATE_INTERVAL_SECONDS = 10;
 
-    LocationCallback locationCallback = new LocationCallback() {
-        @Override
-        public void onLocationResult(LocationResult locationResult) {
-            if (locationResult == null) {
-                return;
-            }
-            for (Location location : locationResult.getLocations()) {
-                Log.d(TAG, "onLocationResult - " + location.toString());
-            }
-        }
-    };
+    LocationCallback locationCallback = new LocationCallbackImpl();
 
     private FusedLocationProviderClient fusedLocationClient;
 
@@ -58,9 +48,12 @@ public class LocationManagerImpl implements LocationManager {
 
     private Location lastLocation;
 
+    private LocationChangedListener listener;
+
     private LocationRequest locationRequest;
 
-    public LocationManagerImpl(Context context) {
+    public LocationManagerImpl(Context context, LocationChangedListener listener) {
+        this.listener = listener;
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
         createLocationRequest();
     }
@@ -80,11 +73,6 @@ public class LocationManagerImpl implements LocationManager {
         isUpdatesStarted = false;
 
         fusedLocationClient.removeLocationUpdates(locationCallback);
-    }
-
-    @Override
-    public Location getLastKnownLocation() {
-        return lastLocation;
     }
 
     private void requestLocationUpdates(Activity activity) {
@@ -155,9 +143,28 @@ public class LocationManagerImpl implements LocationManager {
                                public void onSuccess(Location location) {
                                    if (location != null) {
                                        Log.d(TAG, "location - " + location.toString());
-                                       LocationManagerImpl.this.lastLocation = location;
+                                       updateLastLocation(location);
                                    }
                                }
                            });
+    }
+
+    private void updateLastLocation(Location location) {
+        lastLocation = location;
+        listener.locationChanged(location);
+    }
+
+    private class LocationCallbackImpl extends LocationCallback {
+
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            if (locationResult == null) {
+                return;
+            }
+            Location local = locationResult.getLastLocation();
+            if (local != null) {
+                updateLastLocation(local);
+            }
+        }
     }
 }

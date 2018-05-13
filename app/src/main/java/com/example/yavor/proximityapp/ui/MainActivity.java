@@ -3,12 +3,14 @@ package com.example.yavor.proximityapp.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.yavor.proximityapp.R;
+import com.example.yavor.proximityapp.location.LocationChangedListener;
 import com.example.yavor.proximityapp.location.LocationManager;
 import com.example.yavor.proximityapp.location.LocationManagerImpl;
 import com.example.yavor.proximityapp.places.PlacesManager;
@@ -17,7 +19,7 @@ import com.example.yavor.proximityapp.places.QueryParams;
 import static com.example.yavor.proximityapp.location.LocationManagerImpl.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.example.yavor.proximityapp.location.LocationManagerImpl.REQUEST_CHECK_SETTINGS;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LocationChangedListener {
 
     private static final String TAG = "MainActivity";
 
@@ -26,6 +28,11 @@ public class MainActivity extends AppCompatActivity {
     private LocationManager locationManager;
 
     private ViewPager viewPager;
+
+    @Override
+    public void locationChanged(Location location) {
+        Log.d(TAG, "locationChanged - " + location.toString());
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -91,6 +98,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.pager);
         viewPager.setAdapter(fragmentPagerAdapter);
 
-        locationManager = new LocationManagerImpl(getApplicationContext());
+        locationManager = new LocationManagerImpl(getApplicationContext(), this);
     }
 }

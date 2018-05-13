@@ -1,7 +1,9 @@
 package com.example.yavor.proximityapp.location;
 
+import android.location.Location;
+
 public interface LocationChangedListener {
 
-    void LocationChanged();
+    void locationChanged(Location location);
 
 }
