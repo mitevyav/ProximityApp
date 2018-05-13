@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressLint("MissingPermission")
 public class DeviceLocationManagerImpl implements DeviceLocationManager {
 
-    private static final String TAG = "DeviceLocationManagerImpl";
+    private static final String TAG = "DeviceLocationManager";
 
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 505;
 

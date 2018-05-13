@@ -13,10 +13,11 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class NearbyLocationsRestManager implements Callback<NearbyLocationsResultJson> {
 
-    private static final String TAG = "NearbyLocationsRestManager";
+    private static final String TAG = "NearbyLocationsManager";
 
     @Override
-    public void onResponse(Call<NearbyLocationsResultJson> call, Response<NearbyLocationsResultJson> response) {
+    public void onResponse(Call<NearbyLocationsResultJson> call,
+                           Response<NearbyLocationsResultJson> response) {
         Log.d(TAG, "onResponse");
         if (response.isSuccessful()) {
             NearbyLocationsResultJson nearbyLocationsResultJson = response.body();
