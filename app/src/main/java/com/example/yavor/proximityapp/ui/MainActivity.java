@@ -8,11 +8,15 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.example.yavor.proximityapp.R;
 import com.example.yavor.proximityapp.devicelocation.DeviceLocationManagerImpl;
 import com.example.yavor.proximityapp.nearbylocations.restapi.NearbyLocationsRestManager;
 import com.example.yavor.proximityapp.nearbylocations.restapi.QueryParams;
+import com.example.yavor.proximityapp.preferences.SettingsActivity;
 
 import static com.example.yavor.proximityapp.devicelocation.DeviceLocationManagerImpl.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.example.yavor.proximityapp.devicelocation.DeviceLocationManagerImpl.REQUEST_CHECK_SETTINGS;
@@ -26,6 +30,24 @@ public class MainActivity extends AppCompatActivity {
     private NearbyLocationsViewModel viewModel;
 
     private ViewPager viewPager;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.preferences:
+                launchPreferences();
+                return false;
+        }
+
+        return (super.onOptionsItemSelected(item));
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -101,5 +123,10 @@ public class MainActivity extends AppCompatActivity {
                                                                          viewModel));
         viewModel.setQueryParams(queryParams);
         viewModel.setRestManager(new NearbyLocationsRestManager(viewModel));
+    }
+
+    private void launchPreferences() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 }

@@ -66,7 +66,9 @@ public class NearbyLocationsViewModel extends ViewModel implements DeviceLocatio
     public void onResult(List<NearbyLocationJson> result) {
         List<NearbyLocation> locations = new NearbyLocationTransformer(currentLocation,
                                                                        result).getNearbyLocations();
-        locationsLiveData.setValue(locations);
+        if (locationsLiveData != null) {
+            locationsLiveData.setValue(locations);
+        }
 
     }
 }
