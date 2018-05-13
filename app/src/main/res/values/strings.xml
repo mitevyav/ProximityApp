@@ -5,5 +5,5 @@
     <string name="preferences_label">Preferences</string>
     <string name="settings_label">Settings</string>
     <string name="api_key">AIzaSyCV_JQdRwDBkBXTx7sIiRLYfC6Q1KoYoWs</string>
-
+    <string name="distance_item_string">%1$d m</string>
 </resources>

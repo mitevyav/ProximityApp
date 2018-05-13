@@ -37,7 +37,9 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.Loca
     public void onBindViewHolder(LocationViewHolder holder, int position) {
         NearbyLocation location = nearbyLocations.get(position);
         holder.name.setText(location.getName());
-        holder.distance.setText(String.valueOf(location.getDistance()));
+        holder.distance.setText(holder.distance.getContext()
+                                               .getString(R.string.distance_item_string,
+                                                          location.getDistance()));
 
     }
 
