@@ -59,6 +59,11 @@ public class DeviceLocationManagerImpl implements DeviceLocationManager {
     }
 
     @Override
+    public Location getLastLocation() {
+        return lastLocation;
+    }
+
+    @Override
     public void start(Activity activity) {
         Log.d(TAG, "start()");
         checkSettings(activity);

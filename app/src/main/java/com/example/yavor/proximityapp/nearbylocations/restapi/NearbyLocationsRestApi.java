@@ -1,4 +1,4 @@
-package com.example.yavor.proximityapp.nearbylocations;
+package com.example.yavor.proximityapp.nearbylocations.restapi;
 
 import com.example.yavor.proximityapp.nearbylocations.json.NearbyLocationsResultJson;
 

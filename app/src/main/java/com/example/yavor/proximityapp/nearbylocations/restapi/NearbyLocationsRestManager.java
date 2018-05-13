@@ -1,9 +1,11 @@
-package com.example.yavor.proximityapp.nearbylocations;
+package com.example.yavor.proximityapp.nearbylocations.restapi;
 
 import android.util.Log;
 
 import com.example.yavor.proximityapp.nearbylocations.json.NearbyLocationJson;
 import com.example.yavor.proximityapp.nearbylocations.json.NearbyLocationsResultJson;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -13,7 +15,18 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class NearbyLocationsRestManager implements Callback<NearbyLocationsResultJson> {
 
-    private static final String TAG = "NearbyLocationsManager";
+    private static final String TAG = "NearbyLocationsRest";
+
+    private NearbyLocationRestResultListener listener;
+
+    public interface NearbyLocationRestResultListener {
+
+        void onResult(List<NearbyLocationJson> result);
+    }
+
+    public NearbyLocationsRestManager(NearbyLocationRestResultListener listener) {
+        this.listener = listener;
+    }
 
     @Override
     public void onResponse(Call<NearbyLocationsResultJson> call,
@@ -23,6 +36,9 @@ public class NearbyLocationsRestManager implements Callback<NearbyLocationsResul
             NearbyLocationsResultJson nearbyLocationsResultJson = response.body();
             for (NearbyLocationJson nearbyLocationJson : nearbyLocationsResultJson.getPlacesJson()) {
                 Log.d(TAG, "nearbyLocationJson - " + nearbyLocationJson.toString());
+            }
+            if (listener != null) {
+                listener.onResult(nearbyLocationsResultJson.getPlacesJson());
             }
         } else {
             Log.d(TAG, "response.errorBody - " + response.errorBody());
