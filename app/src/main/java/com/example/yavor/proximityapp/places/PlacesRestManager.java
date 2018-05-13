@@ -11,9 +11,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
-public class PlacesManager implements Callback<PlacesInfoJson> {
+public class PlacesRestManager implements Callback<PlacesInfoJson> {
 
-    private static final String TAG = "PlacesManager";
+    private static final String TAG = "PlacesRestManager";
 
     @Override
     public void onResponse(Call<PlacesInfoJson> call, Response<PlacesInfoJson> response) {
@@ -40,7 +40,7 @@ public class PlacesManager implements Callback<PlacesInfoJson> {
                                       .baseUrl("https://maps.googleapis.com/")
                                       .build();
 
-        PlacesService service = retrofit.create(PlacesService.class);
+        PlacesRestApi service = retrofit.create(PlacesRestApi.class);
 
         Call<PlacesInfoJson> call = service.getPlacesInfo(queryParams.getLocation(),
                                                           queryParams.getRadius(),

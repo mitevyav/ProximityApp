@@ -13,7 +13,7 @@ import com.example.yavor.proximityapp.R;
 import com.example.yavor.proximityapp.location.LocationChangedListener;
 import com.example.yavor.proximityapp.location.LocationManager;
 import com.example.yavor.proximityapp.location.LocationManagerImpl;
-import com.example.yavor.proximityapp.places.PlacesManager;
+import com.example.yavor.proximityapp.places.PlacesRestManager;
 import com.example.yavor.proximityapp.places.QueryParams;
 
 import static com.example.yavor.proximityapp.location.LocationManagerImpl.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
@@ -88,10 +88,10 @@ public class MainActivity extends AppCompatActivity implements LocationChangedLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        new PlacesManager().makeRequest(new QueryParams("-33.8670522,151.1957362",
-                                                        "1500",
-                                                        "restaurant",
-                                                        "AIzaSyCV_JQdRwDBkBXTx7sIiRLYfC6Q1KoYoWs"));
+        new PlacesRestManager().makeRequest(new QueryParams("-33.8670522,151.1957362",
+                                                            "1500",
+                                                            "restaurant",
+                                                            "AIzaSyCV_JQdRwDBkBXTx7sIiRLYfC6Q1KoYoWs"));
 
         fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager(),
                                                         getApplicationContext());
