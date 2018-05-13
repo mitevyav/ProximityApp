@@ -1,10 +1,9 @@
 package com.example.yavor.proximityapp.ui;
 
-import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,40 +14,52 @@ import com.example.yavor.proximityapp.location.LocationManagerImpl;
 import com.example.yavor.proximityapp.places.PlacesManager;
 import com.example.yavor.proximityapp.places.QueryParams;
 
+import static com.example.yavor.proximityapp.location.LocationManagerImpl.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
+import static com.example.yavor.proximityapp.location.LocationManagerImpl.REQUEST_CHECK_SETTINGS;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 505;
-
-    FragmentPagerAdapter fragmentPagerAdapter;
-
-    ViewPager viewPager;
+    private FragmentPagerAdapter fragmentPagerAdapter;
 
     private LocationManager locationManager;
 
+    private ViewPager viewPager;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        new PlacesManager().makeRequest(new QueryParams("-33.8670522,151.1957362",
-                                                        "1500",
-                                                        "restaurant",
-                                                        "AIzaSyCV_JQdRwDBkBXTx7sIiRLYfC6Q1KoYoWs"));
-        locationManager = new LocationManagerImpl(this, getApplicationContext());
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG,
+              "onActivityResult - requestCode - " + requestCode + ", resultCode - " + resultCode);
+        switch (requestCode) {
+            case REQUEST_CHECK_SETTINGS:
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+                        locationManager.start(this);
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        locationManager.stop();
+                        break;
+                    default:
+                        break;
+                }
+                break;
+        }
+    }
 
-        fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager(),
-                                                        getApplicationContext());
-        viewPager = findViewById(R.id.pager);
-        viewPager.setAdapter(fragmentPagerAdapter);
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause");
+        locationManager.stop();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
-        checkPermissions();
+        locationManager.start(this);
     }
 
     @Override
@@ -59,21 +70,27 @@ public class MainActivity extends AppCompatActivity {
             case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
                 if (grantResults.length > 0 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    locationManager.startLocationUpdates();
-                } else {
-
+                    locationManager.start(this);
                 }
                 return;
             }
         }
     }
 
-    private void checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-            PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                                              new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
-                                              PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        new PlacesManager().makeRequest(new QueryParams("-33.8670522,151.1957362",
+                                                        "1500",
+                                                        "restaurant",
+                                                        "AIzaSyCV_JQdRwDBkBXTx7sIiRLYfC6Q1KoYoWs"));
+
+        fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager(),
+                                                        getApplicationContext());
+        viewPager = findViewById(R.id.pager);
+        viewPager.setAdapter(fragmentPagerAdapter);
+
+        locationManager = new LocationManagerImpl(getApplicationContext());
     }
 }

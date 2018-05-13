@@ -1,11 +1,13 @@
 package com.example.yavor.proximityapp.location;
 
+import android.app.Activity;
+import android.location.Location;
+
 public interface LocationManager {
 
+    void start(Activity activity);
 
-    void startLocationUpdates();
+    void stop();
 
-    void stopLocationUpdates();
-
-    void getLastKnownLocation();
+    Location getLastKnownLocation();
 }
