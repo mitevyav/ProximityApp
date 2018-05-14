@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.example.yavor.proximityapp.R;
 import com.example.yavor.proximityapp.nearbylocations.NearbyLocation;
+import com.example.yavor.proximityapp.utils.MapsUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -21,13 +22,11 @@ import java.util.List;
 
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback {
 
-    private float ZOOM_LEVEL = 10f;
-
     private GoogleMap googleMap;
 
-    private boolean updateZoom = false;
-
     private LocationProvider locationProvider;
+
+    private boolean updateZoom = false;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -69,6 +68,9 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         if (locations == null || googleMap == null) {
             return;
         }
+
+        googleMap.clear();
+
         for (NearbyLocation location : locations) {
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             googleMap.addMarker(new MarkerOptions().position(latLng).title(getPinLabel(location)));
@@ -85,7 +87,10 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
             return;
         }
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_LEVEL));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,
+                                                               MapsUtils.getZoomLevel(location,
+                                                                                      googleMap,
+                                                                                      getActivity())));
     }
 
 }
