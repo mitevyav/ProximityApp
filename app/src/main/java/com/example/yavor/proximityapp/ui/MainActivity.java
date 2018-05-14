@@ -13,9 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.yavor.proximityapp.R;
-import com.example.yavor.proximityapp.nearbylocations.restapi.QueryParams;
 import com.example.yavor.proximityapp.preferences.SettingsActivity;
-import com.example.yavor.proximityapp.utils.PreferenceUtils;
+import com.example.yavor.proximityapp.utils.QueryParamsUtils;
 
 import static com.example.yavor.proximityapp.devicelocation.DeviceLocationManagerImpl.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.example.yavor.proximityapp.devicelocation.DeviceLocationManagerImpl.REQUEST_CHECK_SETTINGS;
@@ -30,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isUpdateQueryParams = false;
 
-    private NearbyLocationsViewModel viewModel;
+    private LocationProvider locationProvider;
 
     private ViewPager viewPager;
 
@@ -61,10 +60,10 @@ public class MainActivity extends AppCompatActivity {
             case REQUEST_CHECK_SETTINGS:
                 switch (resultCode) {
                     case Activity.RESULT_OK:
-                        viewModel.getDeviceLocationManager().start(this);
+                        locationProvider.startLocationProvider(this);
                         break;
                     case Activity.RESULT_CANCELED:
-                        viewModel.getDeviceLocationManager().stop();
+                        locationProvider.stopLocationProvider();
                         break;
                     default:
                         break;
@@ -77,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause");
-        viewModel.getDeviceLocationManager().stop();
+        locationProvider.stopLocationProvider();
     }
 
     @Override
@@ -86,9 +85,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onResume");
         if (isUpdateQueryParams) {
             isUpdateQueryParams = false;
-            setQueryParams();
+            locationProvider.updateQueryParams(QueryParamsUtils.createQueryParamsFromLocation(this,
+                                                                                              locationProvider
+                                                                                                      .getCurrentLocation()));
         }
-        viewModel.getDeviceLocationManager().start(this);
+        locationProvider.startLocationProvider(this);
     }
 
     @Override
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
                 if (grantResults.length > 0 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    viewModel.getDeviceLocationManager().start(this);
+                    locationProvider.startLocationProvider(this);
                 }
                 return;
             }
@@ -130,17 +131,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(NearbyLocationsViewModel.class);
-        viewModel.init(getApplicationContext());
-        setQueryParams();
-    }
-
-    private void setQueryParams() {
-        QueryParams queryParams = new QueryParams("",
-                                                  PreferenceUtils.getDistance(this),
-                                                  PreferenceUtils.getType(this),
-                                                  getString(R.string.api_key));
-        viewModel.setQueryParams(queryParams);
+        locationProvider = ViewModelProviders.of(this).get(NearbyLocationsViewModel.class);
+        locationProvider.init(getApplicationContext());
     }
 
     private void launchPreferences() {

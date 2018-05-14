@@ -18,8 +18,8 @@ public class QueryParams {
 
     private String type;
 
-    public QueryParams(String location, String radius, String type, String key) {
-        this.location = location;
+    public QueryParams(Location location, String radius, String type, String key) {
+        setLocation(location);
         this.radius = radius;
         this.type = type;
         this.key = key;
@@ -35,11 +35,10 @@ public class QueryParams {
     }
 
     public void setLocation(Location location) {
+        if (location == null) {
+            return;
+        }
         this.location = location.getLatitude() + DELIMITER + location.getLongitude();
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public String getRadius() {

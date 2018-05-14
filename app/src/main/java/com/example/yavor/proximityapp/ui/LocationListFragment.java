@@ -21,9 +21,9 @@ public class LocationListFragment extends Fragment {
 
     private LocationsAdapter adapter;
 
-    private RecyclerView recyclerView;
+    private LocationProvider locationProvider;
 
-    private NearbyLocationsViewModel viewModel;
+    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -33,9 +33,9 @@ public class LocationListFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_location_list, container, false);
 
-        viewModel = ViewModelProviders.of(getActivity()).get(NearbyLocationsViewModel.class);
+        locationProvider = ViewModelProviders.of(getActivity()).get(NearbyLocationsViewModel.class);
 
-        adapter = new LocationsAdapter(viewModel.getLocations().getValue());
+        adapter = new LocationsAdapter(locationProvider.getLocations().getValue());
         recyclerView = rootView.findViewById(R.id.recycler_view);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
@@ -43,7 +43,7 @@ public class LocationListFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        viewModel.getLocations().observe(this, new Observer<List<NearbyLocation>>() {
+        locationProvider.getLocations().observe(this, new Observer<List<NearbyLocation>>() {
             @Override
             public void onChanged(@Nullable List<NearbyLocation> nearbyLocations) {
                 adapter.swap(nearbyLocations);

@@ -25,31 +25,44 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     private GoogleMap googleMap;
 
-    private NearbyLocationsViewModel viewModel;
+    private boolean updateZoom = false;
+
+    private LocationProvider locationProvider;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewModel = ViewModelProviders.of(getActivity()).get(NearbyLocationsViewModel.class);
+        locationProvider = ViewModelProviders.of(getActivity()).get(NearbyLocationsViewModel.class);
         getMapAsync(this);
+
+        locationProvider.hasNewQuery().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                updateZoom = true;
+            }
+        });
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-        updateMap();
-        viewModel.getLocations().observe(this, new Observer<List<NearbyLocation>>() {
+        initMap();
+        locationProvider.getLocations().observe(this, new Observer<List<NearbyLocation>>() {
             @Override
             public void onChanged(@Nullable List<NearbyLocation> nearbyLocations) {
-                updateMap();
+                addPins(locationProvider.getLocations().getValue());
+                if (updateZoom) {
+                    moveCameraCurrentLocation(locationProvider.getCurrentLocation());
+                    updateZoom = false;
+                }
             }
         });
     }
 
-    private void updateMap() {
-        addPins(viewModel.getLocations().getValue());
-        moveCameraCurrentLocation(viewModel.getDeviceLocationManager().getLastLocation());
+    private void initMap() {
+        addPins(locationProvider.getLocations().getValue());
+        moveCameraCurrentLocation(locationProvider.getCurrentLocation());
     }
 
     private void addPins(List<NearbyLocation> locations) {

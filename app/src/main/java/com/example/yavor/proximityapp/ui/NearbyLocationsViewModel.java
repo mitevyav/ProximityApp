@@ -1,5 +1,6 @@
 package com.example.yavor.proximityapp.ui;
 
+import android.app.Activity;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
@@ -13,11 +14,13 @@ import com.example.yavor.proximityapp.nearbylocations.NearbyLocationTransformer;
 import com.example.yavor.proximityapp.nearbylocations.json.NearbyLocationJson;
 import com.example.yavor.proximityapp.nearbylocations.restapi.NearbyLocationsRestManager;
 import com.example.yavor.proximityapp.nearbylocations.restapi.QueryParams;
+import com.example.yavor.proximityapp.utils.QueryParamsUtils;
 
 import java.util.Collections;
 import java.util.List;
 
 public class NearbyLocationsViewModel extends ViewModel implements DeviceLocationChangedListener,
+                                                                   LocationProvider,
                                                                    NearbyLocationsRestManager.NearbyLocationRestResultListener {
 
     private Location currentLocation;
@@ -32,18 +35,39 @@ public class NearbyLocationsViewModel extends ViewModel implements DeviceLocatio
 
     private NearbyLocationsRestManager restManager;
 
+    @Override
+    public void stopLocationProvider() {
+        deviceLocationManager.stop();
+    }
+
+    @Override
+    public void startLocationProvider(Activity activity) {
+        deviceLocationManager.start(activity);
+    }
+
+    @Override
+    public Location getCurrentLocation() {
+        return currentLocation;
+    }
+
+    @Override
     public void init(Context context) {
         deviceLocationManager = new DeviceLocationManagerImpl(context, this);
         restManager = new NearbyLocationsRestManager(this);
+        queryParams = QueryParamsUtils.createQueryParamsFromLocation(context, currentLocation);
     }
 
-    public void setQueryParams(QueryParams queryParams) {
+    @Override
+    public void updateQueryParams(QueryParams queryParams) {
         this.queryParams = queryParams;
         if (locationsLiveData != null) {
             locationsLiveData.setValue(Collections.<NearbyLocation>emptyList());
         }
+        restManager.makeRequest(queryParams);
+        newQueryLiveData.setValue(true);
     }
 
+    @Override
     public MutableLiveData<Boolean> hasNewQuery() {
         if (newQueryLiveData == null) {
             newQueryLiveData = new MutableLiveData<>();
@@ -51,6 +75,7 @@ public class NearbyLocationsViewModel extends ViewModel implements DeviceLocatio
         return newQueryLiveData;
     }
 
+    @Override
     public MutableLiveData<List<NearbyLocation>> getLocations() {
         if (locationsLiveData == null) {
             locationsLiveData = new MutableLiveData<>();
@@ -60,21 +85,18 @@ public class NearbyLocationsViewModel extends ViewModel implements DeviceLocatio
 
     @Override
     public void locationChanged(Location location) {
+        Location previousLocation = this.currentLocation;
         this.currentLocation = location;
-        if (queryParams == null || currentLocation == null) {
-            locationsLiveData.setValue(Collections.<NearbyLocation>emptyList());
-            return;
+        queryParams.setLocation(location);
+
+        if (previousLocation == null) {
+            newQueryLiveData.setValue(true);
         }
-        queryParams.setLocation(currentLocation);
-        restManager.makeRequest(queryParams);
-    }
 
-    public DeviceLocationManager getDeviceLocationManager() {
-        return deviceLocationManager;
-    }
+        if (currentLocation != null) {
+            restManager.makeRequest(queryParams);
+        }
 
-    public void setDeviceLocationManager(DeviceLocationManager deviceLocationManager) {
-        this.deviceLocationManager = deviceLocationManager;
     }
 
     @Override
