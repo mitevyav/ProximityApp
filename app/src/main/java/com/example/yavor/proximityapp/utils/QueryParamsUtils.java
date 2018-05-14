@@ -33,4 +33,13 @@ public class QueryParamsUtils {
                                context.getString(R.string.api_key));
     }
 
+    public static void saveTypeAndDistance(Context context, String distance, String type) {
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getString(R.string.pref_key_distance), distance);
+        editor.putString(context.getString(R.string.pref_key_type), type);
+        editor.commit();
+    }
+
 }

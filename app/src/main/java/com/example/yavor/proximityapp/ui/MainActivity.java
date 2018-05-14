@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,8 +16,6 @@ import android.view.MenuItem;
 import com.example.yavor.proximityapp.R;
 import com.example.yavor.proximityapp.nearbylocations.viewmodel.LocationProvider;
 import com.example.yavor.proximityapp.nearbylocations.viewmodel.NearbyLocationsViewModel;
-import com.example.yavor.proximityapp.preferences.SettingsActivity;
-import com.example.yavor.proximityapp.utils.QueryParamsUtils;
 
 import static com.example.yavor.proximityapp.devicelocation.DeviceLocationManagerImpl.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.example.yavor.proximityapp.devicelocation.DeviceLocationManagerImpl.REQUEST_CHECK_SETTINGS;
@@ -25,11 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private static final String UPDATE_QUERY_PARAMS_KEY = "UPDATE_QUERY_PARAMS_KEY";
-
     private FragmentPagerAdapter fragmentPagerAdapter;
-
-    private boolean isUpdateQueryParams = false;
 
     private LocationProvider locationProvider;
 
@@ -46,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.preferences:
-                launchPreferences();
+                showNewQueryDialog();
                 return false;
         }
 
@@ -85,12 +80,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
-        if (isUpdateQueryParams) {
-            isUpdateQueryParams = false;
-            locationProvider.updateQueryParams(QueryParamsUtils.createQueryParamsFromLocation(this,
-                                                                                              locationProvider
-                                                                                                      .getCurrentLocation()));
-        }
         locationProvider.startLocationProvider(this);
     }
 
@@ -114,10 +103,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (savedInstanceState != null) {
-            isUpdateQueryParams = savedInstanceState.getBoolean(UPDATE_QUERY_PARAMS_KEY);
-        }
-
         initViewModel();
 
         fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager(),
@@ -126,21 +111,14 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(fragmentPagerAdapter);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(UPDATE_QUERY_PARAMS_KEY, isUpdateQueryParams);
-    }
-
     private void initViewModel() {
         locationProvider = ViewModelProviders.of(this).get(NearbyLocationsViewModel.class);
         locationProvider.init(getApplicationContext());
     }
 
-    private void launchPreferences() {
-        isUpdateQueryParams = true;
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+    private void showNewQueryDialog() {
+        DialogFragment newFragment = new NewSearchDialogFragment();
+        newFragment.show(getSupportFragmentManager(), NewSearchDialogFragment.TAG);
     }
 
 }
