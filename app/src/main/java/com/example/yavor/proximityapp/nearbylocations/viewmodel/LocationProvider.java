@@ -1,4 +1,4 @@
-package com.example.yavor.proximityapp.ui;
+package com.example.yavor.proximityapp.nearbylocations.viewmodel;
 
 import android.app.Activity;
 import android.arch.lifecycle.MutableLiveData;

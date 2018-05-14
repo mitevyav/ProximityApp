@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.example.yavor.proximityapp.nearbylocations.json.NearbyLocationJson;
 import com.example.yavor.proximityapp.nearbylocations.json.NearbyLocationsResultJson;
-import com.example.yavor.proximityapp.ui.LocationProvider;
 
 import java.util.List;
 

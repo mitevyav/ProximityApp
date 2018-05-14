@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 
 import com.example.yavor.proximityapp.R;
 import com.example.yavor.proximityapp.nearbylocations.NearbyLocation;
+import com.example.yavor.proximityapp.nearbylocations.viewmodel.LocationProvider;
+import com.example.yavor.proximityapp.nearbylocations.viewmodel.NearbyLocationsViewModel;
 
 import java.util.List;
 

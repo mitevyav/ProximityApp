@@ -10,6 +10,8 @@ import android.view.View;
 
 import com.example.yavor.proximityapp.R;
 import com.example.yavor.proximityapp.nearbylocations.NearbyLocation;
+import com.example.yavor.proximityapp.nearbylocations.viewmodel.LocationProvider;
+import com.example.yavor.proximityapp.nearbylocations.viewmodel.NearbyLocationsViewModel;
 import com.example.yavor.proximityapp.utils.MapsUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

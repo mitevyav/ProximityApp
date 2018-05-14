@@ -13,6 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.yavor.proximityapp.R;
+import com.example.yavor.proximityapp.nearbylocations.viewmodel.LocationProvider;
+import com.example.yavor.proximityapp.nearbylocations.viewmodel.NearbyLocationsViewModel;
 import com.example.yavor.proximityapp.preferences.SettingsActivity;
 import com.example.yavor.proximityapp.utils.QueryParamsUtils;
 
