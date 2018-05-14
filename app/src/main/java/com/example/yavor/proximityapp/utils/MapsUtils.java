@@ -9,6 +9,8 @@ import com.example.yavor.proximityapp.nearbylocations.NearbyLocation;
 
 public final class MapsUtils {
 
+    private static final String GOOGLE_MAPS_PCKG_NAME = "com.google.android.apps.maps";
+
     private MapsUtils() {
 
     }
@@ -22,7 +24,7 @@ public final class MapsUtils {
                                        location.getName());
         Uri gmmIntentUri = Uri.parse(uri);
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
+        mapIntent.setPackage(GOOGLE_MAPS_PCKG_NAME);
         if (mapIntent.resolveActivity(context.getPackageManager()) != null) {
             context.startActivity(mapIntent);
         }
