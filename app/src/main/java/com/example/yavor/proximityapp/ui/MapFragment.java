@@ -21,6 +21,8 @@ import java.util.List;
 
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback {
 
+    private float ZOOM_LEVEL = 10f;
+
     private GoogleMap googleMap;
 
     private NearbyLocationsViewModel viewModel;
@@ -70,7 +72,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
             return;
         }
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_LEVEL));
     }
 
 }
