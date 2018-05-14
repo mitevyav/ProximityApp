@@ -24,6 +24,8 @@ public class NearbyLocationsViewModel extends ViewModel implements DeviceLocatio
 
     private MutableLiveData<List<NearbyLocation>> locationsLiveData;
 
+    private MutableLiveData<Boolean> newQueryLiveData;
+
     private QueryParams queryParams;
 
     private NearbyLocationsRestManager restManager;
@@ -37,6 +39,13 @@ public class NearbyLocationsViewModel extends ViewModel implements DeviceLocatio
         if (locationsLiveData != null) {
             locationsLiveData.setValue(Collections.<NearbyLocation>emptyList());
         }
+    }
+
+    public MutableLiveData<Boolean> hasNewQuery() {
+        if (newQueryLiveData == null) {
+            newQueryLiveData = new MutableLiveData<>();
+        }
+        return newQueryLiveData;
     }
 
     public MutableLiveData<List<NearbyLocation>> getLocations() {
