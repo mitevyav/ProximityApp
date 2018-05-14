@@ -1,8 +1,5 @@
 package com.example.yavor.proximityapp.ui;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.yavor.proximityapp.R;
 import com.example.yavor.proximityapp.nearbylocations.NearbyLocation;
+import com.example.yavor.proximityapp.utils.MapsUtils;
 
 import java.util.List;
 
@@ -93,21 +91,6 @@ public class LocationsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return position == 0;
     }
 
-    private void startMapIntent(Context context, NearbyLocation location) {
-        String uri = context.getString(R.string.format_map_uri,
-                                       location.getLatitude(),
-                                       location.getLongitude(),
-                                       location.getLatitude(),
-                                       location.getLongitude(),
-                                       location.getName());
-        Uri gmmIntentUri = Uri.parse(uri);
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
-        if (mapIntent.resolveActivity(context.getPackageManager()) != null) {
-            context.startActivity(mapIntent);
-        }
-    }
-
     public class LocationViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
@@ -121,7 +104,7 @@ public class LocationsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         @Override
         public void onClick(View v) {
-            startMapIntent(v.getContext(), getItem(getAdapterPosition()));
+            MapsUtils.launchMapForByNearbyLocation(v.getContext(), getItem(getAdapterPosition()));
         }
 
     }
