@@ -106,8 +106,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void showNewQueryDialog() {
-        DialogFragment newFragment = new NewSearchDialogFragment();
-        newFragment.show(getSupportFragmentManager(), NewSearchDialogFragment.TAG);
+        DialogFragment newFragment = new NewQueryParamsDialogFragment();
+        newFragment.show(getSupportFragmentManager(), NewQueryParamsDialogFragment.TAG);
     }
 
 }

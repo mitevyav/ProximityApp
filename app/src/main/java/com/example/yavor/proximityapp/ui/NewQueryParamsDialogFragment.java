@@ -18,9 +18,9 @@ import com.example.yavor.proximityapp.nearbylocations.viewmodel.LocationProvider
 import com.example.yavor.proximityapp.nearbylocations.viewmodel.NearbyLocationsViewModel;
 import com.example.yavor.proximityapp.utils.QueryParamsUtils;
 
-public class NewSearchDialogFragment extends DialogFragment implements View.OnClickListener {
+public class NewQueryParamsDialogFragment extends DialogFragment implements View.OnClickListener {
 
-    public static final String TAG = "NewSearchDialogFragmentTag";
+    public static final String TAG = "NewQueryParamsDialogFragment";
 
     private static final int MAX_DISTANCE_IN_METERS = 50000;
 
