@@ -29,8 +29,6 @@ public class LocationListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
-
-        // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_location_list, container, false);
 
         locationProvider = ViewModelProviders.of(getActivity()).get(NearbyLocationsViewModel.class);
