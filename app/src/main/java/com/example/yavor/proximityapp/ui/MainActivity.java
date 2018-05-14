@@ -13,8 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.yavor.proximityapp.R;
-import com.example.yavor.proximityapp.devicelocation.DeviceLocationManagerImpl;
-import com.example.yavor.proximityapp.nearbylocations.restapi.NearbyLocationsRestManager;
 import com.example.yavor.proximityapp.nearbylocations.restapi.QueryParams;
 import com.example.yavor.proximityapp.preferences.SettingsActivity;
 import com.example.yavor.proximityapp.utils.PreferenceUtils;
@@ -133,10 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViewModel() {
         viewModel = ViewModelProviders.of(this).get(NearbyLocationsViewModel.class);
-
-        viewModel.setDeviceLocationManager(new DeviceLocationManagerImpl(getApplication(),
-                                                                         viewModel));
-        viewModel.setRestManager(new NearbyLocationsRestManager(viewModel));
+        viewModel.init(getApplicationContext());
         setQueryParams();
     }
 

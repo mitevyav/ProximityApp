@@ -2,10 +2,12 @@ package com.example.yavor.proximityapp.ui;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.content.Context;
 import android.location.Location;
 
 import com.example.yavor.proximityapp.devicelocation.DeviceLocationChangedListener;
 import com.example.yavor.proximityapp.devicelocation.DeviceLocationManager;
+import com.example.yavor.proximityapp.devicelocation.DeviceLocationManagerImpl;
 import com.example.yavor.proximityapp.nearbylocations.NearbyLocation;
 import com.example.yavor.proximityapp.nearbylocations.NearbyLocationTransformer;
 import com.example.yavor.proximityapp.nearbylocations.json.NearbyLocationJson;
@@ -30,8 +32,9 @@ public class NearbyLocationsViewModel extends ViewModel implements DeviceLocatio
 
     private NearbyLocationsRestManager restManager;
 
-    public void setRestManager(NearbyLocationsRestManager restManager) {
-        this.restManager = restManager;
+    public void init(Context context) {
+        deviceLocationManager = new DeviceLocationManagerImpl(context, this);
+        restManager = new NearbyLocationsRestManager(this);
     }
 
     public void setQueryParams(QueryParams queryParams) {
