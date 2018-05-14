@@ -1,5 +1,8 @@
 package com.example.yavor.proximityapp.ui;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,8 +39,10 @@ public class LocationsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.location_item,
                                                                              parent,
                                                                              false);
-            //inflate your layout and pass it to view holder
-            return new LocationViewHolder(itemView);
+
+            LocationViewHolder viewHolder = new LocationViewHolder(itemView);
+            itemView.setOnClickListener(viewHolder);
+            return viewHolder;
         } else if (viewType == TYPE_HEADER) {
             View itemView =
                     LayoutInflater.from(parent.getContext()).inflate(R.layout.location_list_header,
@@ -88,7 +93,23 @@ public class LocationsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return position == 0;
     }
 
-    public class LocationViewHolder extends RecyclerView.ViewHolder {
+    private void startMapIntent(Context context, NearbyLocation location) {
+        String uri = context.getString(R.string.format_map_uri,
+                                       location.getLatitude(),
+                                       location.getLongitude(),
+                                       location.getLatitude(),
+                                       location.getLongitude(),
+                                       location.getName());
+        Uri gmmIntentUri = Uri.parse(uri);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(mapIntent);
+        }
+    }
+
+    public class LocationViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
         public TextView name, distance;
 
@@ -97,6 +118,12 @@ public class LocationsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             name = view.findViewById(R.id.name);
             distance = view.findViewById(R.id.distance);
         }
+
+        @Override
+        public void onClick(View v) {
+            startMapIntent(v.getContext(), getItem(getAdapterPosition()));
+        }
+
     }
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
