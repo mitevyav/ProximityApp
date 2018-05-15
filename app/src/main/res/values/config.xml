@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="max_query_radius">50000</integer>
+    <integer name="max_query_radius">10000</integer>
+    <string name="pref_distance_default_value">1500</string>
+    <string name="pref_type_default_value">bar</string>
 </resources>
