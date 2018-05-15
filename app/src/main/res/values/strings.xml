@@ -12,4 +12,5 @@
     <string name="search_params_dialog_title">Search Params</string>
     <string name="slider_label">%1$d meters</string>
     <string name="no_maps">There is no map application</string>
+    <string name="no_data">No data!</string>
 </resources>

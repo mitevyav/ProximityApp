@@ -23,6 +23,8 @@ public class LocationListFragment extends Fragment {
 
     private LocationsAdapter adapter;
 
+    private View emptyView;
+
     private LocationProvider locationProvider;
 
     private RecyclerView recyclerView;
@@ -35,6 +37,8 @@ public class LocationListFragment extends Fragment {
 
         locationProvider = ViewModelProviders.of(getActivity()).get(NearbyLocationsViewModel.class);
 
+        emptyView = rootView.findViewById(R.id.empty_view);
+
         adapter = new LocationsAdapter(locationProvider.getLocations().getValue());
         recyclerView = rootView.findViewById(R.id.recycler_view);
 
@@ -46,10 +50,23 @@ public class LocationListFragment extends Fragment {
         locationProvider.getLocations().observe(this, new Observer<List<NearbyLocation>>() {
             @Override
             public void onChanged(@Nullable List<NearbyLocation> nearbyLocations) {
+
+                checkEmptyView(nearbyLocations);
                 adapter.swap(nearbyLocations);
             }
         });
+        checkEmptyView(locationProvider.getLocations().getValue());
         return rootView;
+    }
+
+    private void checkEmptyView(List<NearbyLocation> nearbyLocations) {
+        if (nearbyLocations == null || nearbyLocations.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
     }
 
 }
