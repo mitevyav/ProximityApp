@@ -1,10 +1,12 @@
 package com.example.yavor.proximityapp.ui;
 
 import android.app.Activity;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case REQUEST_CHECK_SETTINGS:
                 switch (resultCode) {
                     case Activity.RESULT_OK:
-                        locationProvider.startLocationProvider(this);
+                        locationProvider.startLocationProvider(getApplicationContext());
                         break;
                     case Activity.RESULT_CANCELED:
                         locationProvider.stopLocationProvider();
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
-        locationProvider.startLocationProvider(this);
+        locationProvider.startLocationProvider(getApplicationContext());
     }
 
     @Override
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
                 if (grantResults.length > 0 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    locationProvider.startLocationProvider(this);
+                    locationProvider.startLocationProvider(getApplicationContext());
                 }
                 return;
             }
@@ -98,11 +100,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(this);
+        locationProvider.checkSettingsAndPermissions(this);
     }
 
     private void initViewModel() {
         locationProvider = ViewModelProviders.of(this).get(NearbyLocationsViewModel.class);
         locationProvider.init(getApplicationContext());
+        locationProvider.hasNewQuery().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                locationProvider.checkSettingsAndPermissions(MainActivity.this);
+            }
+        });
     }
 
     private void showNewQueryDialog() {

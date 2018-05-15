@@ -1,13 +1,13 @@
 package com.example.yavor.proximityapp.devicelocation;
 
 import android.app.Activity;
-import android.location.Location;
+import android.content.Context;
 
 public interface DeviceLocationManager {
 
-    Location getLastLocation();
-
-    void start(Activity activity);
+    void start(Context context);
 
     void stop();
+
+    void checkSettingsAndPermissions(final Activity activity);
 }

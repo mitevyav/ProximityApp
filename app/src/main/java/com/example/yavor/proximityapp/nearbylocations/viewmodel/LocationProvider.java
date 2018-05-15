@@ -14,11 +14,13 @@ public interface LocationProvider {
 
     void stopLocationProvider();
 
-    void startLocationProvider(Activity activity);
+    void startLocationProvider(Context context);
 
     Location getCurrentLocation();
 
     void init(Context context);
+
+    void checkSettingsAndPermissions(final Activity activity);
 
     void updateQueryParams(QueryParams queryParams);
 

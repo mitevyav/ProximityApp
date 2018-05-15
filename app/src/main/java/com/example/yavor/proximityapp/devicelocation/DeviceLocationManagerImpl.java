@@ -44,6 +44,8 @@ public class DeviceLocationManagerImpl implements DeviceLocationManager {
 
     private FusedLocationProviderClient fusedLocationClient;
 
+    private boolean invalidLocationSettings = true;
+
     private boolean isUpdatesStarted = false;
 
     private Location lastLocation;
@@ -59,14 +61,9 @@ public class DeviceLocationManagerImpl implements DeviceLocationManager {
     }
 
     @Override
-    public Location getLastLocation() {
-        return lastLocation;
-    }
-
-    @Override
-    public void start(Activity activity) {
+    public void start(Context context) {
         Log.d(TAG, "start()");
-        checkSettings(activity);
+        requestLocationUpdates(context);
     }
 
     @Override
@@ -80,14 +77,44 @@ public class DeviceLocationManagerImpl implements DeviceLocationManager {
         fusedLocationClient.removeLocationUpdates(locationCallback);
     }
 
-    private void requestLocationUpdates(Activity activity) {
+    @Override
+    public void checkSettingsAndPermissions(final Activity activity) {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(locationRequest);
+        SettingsClient client = LocationServices.getSettingsClient(activity);
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+
+        task.addOnSuccessListener(activity, new OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                Log.d(TAG, "LocationSettingsResponse onSuccess");
+                invalidLocationSettings = false;
+                requestPermissions(activity);
+            }
+        });
+
+        task.addOnFailureListener(activity, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "LocationSettingsResponse onFailure");
+                if (e instanceof ResolvableApiException) {
+                    try {
+                        invalidLocationSettings = true;
+                        ResolvableApiException resolvable = (ResolvableApiException) e;
+                        resolvable.startResolutionForResult(activity, REQUEST_CHECK_SETTINGS);
+                    } catch (IntentSender.SendIntentException sendEx) {
+
+                    }
+                }
+            }
+        });
+    }
+
+    private void requestLocationUpdates(Context context) {
         Log.d(TAG, "requestLocationUpdates(): isUpdatesStarted - " + isUpdatesStarted);
 
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) !=
-            PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity,
-                                              new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
-                                              PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) !=
+            PackageManager.PERMISSION_GRANTED || invalidLocationSettings) {
             return;
         }
 
@@ -104,34 +131,14 @@ public class DeviceLocationManagerImpl implements DeviceLocationManager {
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
     }
 
-    private void checkSettings(final Activity activity) {
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        builder.addLocationRequest(locationRequest);
-        SettingsClient client = LocationServices.getSettingsClient(activity);
-        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
-
-        task.addOnSuccessListener(activity, new OnSuccessListener<LocationSettingsResponse>() {
-            @Override
-            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                Log.d(TAG, "LocationSettingsResponse onSuccess");
-                requestLocationUpdates(activity);
-            }
-        });
-
-        task.addOnFailureListener(activity, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "LocationSettingsResponse onFailure");
-                if (e instanceof ResolvableApiException) {
-                    try {
-                        ResolvableApiException resolvable = (ResolvableApiException) e;
-                        resolvable.startResolutionForResult(activity, REQUEST_CHECK_SETTINGS);
-                    } catch (IntentSender.SendIntentException sendEx) {
-
-                    }
-                }
-            }
-        });
+    private void requestPermissions(Activity activity) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) !=
+            PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity,
+                                              new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
+                                              PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            return;
+        }
     }
 
     private void createLocationRequest() {

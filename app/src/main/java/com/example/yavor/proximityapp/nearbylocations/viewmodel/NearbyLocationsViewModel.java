@@ -41,8 +41,8 @@ public class NearbyLocationsViewModel extends ViewModel implements DeviceLocatio
     }
 
     @Override
-    public void startLocationProvider(Activity activity) {
-        deviceLocationManager.start(activity);
+    public void startLocationProvider(Context context) {
+        deviceLocationManager.start(context);
     }
 
     @Override
@@ -55,6 +55,11 @@ public class NearbyLocationsViewModel extends ViewModel implements DeviceLocatio
         deviceLocationManager = new DeviceLocationManagerImpl(context, this);
         restManager = new NearbyLocationsRestManager(this);
         queryParams = QueryParamsUtils.createQueryParamsFromLocation(context, currentLocation);
+    }
+
+    @Override
+    public void checkSettingsAndPermissions(Activity activity) {
+        deviceLocationManager.checkSettingsAndPermissions(activity);
     }
 
     @Override
