@@ -8,7 +8,8 @@
     <string name="list_header_distance_title">Distance</string>
     <string name="ping_label">%1$s, %2$dm</string>
     <string name="distance_hint">distance in meters</string>
-    <string name="format_map_uri">geo:&lt;%1$f&gt;,&lt;%2$f&gt;?q=&lt;%3$f&gt;,&lt;%4$f&gt;(%5$s)</string>
+    <string name="format_map_uri">%1$f,%2$f(%3$s)</string>
     <string name="search_params_dialog_title">Search Params</string>
     <string name="slider_label">%1$d meters</string>
+    <string name="no_maps">There is no map application</string>
 </resources>
