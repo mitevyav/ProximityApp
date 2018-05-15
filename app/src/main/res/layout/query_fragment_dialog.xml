@@ -34,6 +34,7 @@
         android:layout_marginTop="@dimen/query_fragment_dialog_vertical_margin"
         android:gravity="center"
         android:inputType="numberDecimal"
+        android:hint="@string/distance_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner"/>
@@ -41,7 +42,7 @@
     <ImageButton
         android:id="@+id/searchButton"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/query_fragment_search_fragment_height"
         android:layout_margin="@dimen/query_fragment_dialog_vertical_margin"
         android:background="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -54,7 +54,6 @@ public class NewQueryParamsDialogFragment extends DialogFragment implements View
         spinner.setSelection(getSelectedItem(adapter));
 
         editText = view.findViewById(R.id.distance);
-        editText.setText(QueryParamsUtils.getDistance(getActivity()));
 
         view.findViewById(R.id.searchButton).setOnClickListener(this);
     }
