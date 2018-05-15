@@ -27,29 +27,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title"/>
 
-    <EditText
-        android:id="@+id/distance"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/label_seekbar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/query_fragment_dialog_vertical_margin"
-        android:gravity="center"
-        android:inputType="numberDecimal"
-        android:hint="@string/distance_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner"/>
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:max="50000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_seekbar"/>
 
     <ImageButton
         android:id="@+id/searchButton"
         android:layout_width="0dp"
         android:layout_height="@dimen/query_fragment_search_fragment_height"
         android:layout_margin="@dimen/query_fragment_dialog_vertical_margin"
+        android:layout_marginTop="8dp"
         android:background="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/distance"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar"
         app:srcCompat="@android:drawable/ic_menu_search"/>
 
 </android.support.constraint.ConstraintLayout>

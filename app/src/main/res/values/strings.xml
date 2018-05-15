@@ -11,5 +11,5 @@
     <string name="distance_hint">distance in meters</string>
     <string name="format_map_uri">geo:&lt;%1$f&gt;,&lt;%2$f&gt;?q=&lt;%3$f&gt;,&lt;%4$f&gt;(%5$s)</string>
     <string name="search_params_dialog_title">Search Params</string>
-    <string name="invalid_distance_toast">Please pick number in the range of 10-50 000m</string>
+    <string name="slider_label">%1$d meters</string>
 </resources>

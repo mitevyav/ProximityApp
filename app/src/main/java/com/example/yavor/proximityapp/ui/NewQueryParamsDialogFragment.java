@@ -9,26 +9,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.yavor.proximityapp.R;
 import com.example.yavor.proximityapp.nearbylocations.viewmodel.LocationProvider;
 import com.example.yavor.proximityapp.nearbylocations.viewmodel.NearbyLocationsViewModel;
 import com.example.yavor.proximityapp.utils.QueryParamsUtils;
 
-public class NewQueryParamsDialogFragment extends DialogFragment implements View.OnClickListener {
+public class NewQueryParamsDialogFragment extends DialogFragment
+        implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
     public static final String TAG = "NewQueryParamsDialogFragment";
 
-    private static final int MAX_DISTANCE_IN_METERS = 50000;
-
-    private static final int MIN_DISTANCE_IN_METERS = 10;
-
-    private EditText editText;
+    private TextView label;
 
     private LocationProvider locationProvider;
+
+    private SeekBar seekBar;
 
     private Spinner spinner;
 
@@ -44,8 +43,8 @@ public class NewQueryParamsDialogFragment extends DialogFragment implements View
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         locationProvider = ViewModelProviders.of(getActivity()).get(NearbyLocationsViewModel.class);
-        spinner = view.findViewById(R.id.spinner);
 
+        spinner = view.findViewById(R.id.spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                                                                              R.array.types_array,
                                                                              android.R.layout.simple_spinner_item);
@@ -53,25 +52,40 @@ public class NewQueryParamsDialogFragment extends DialogFragment implements View
         spinner.setAdapter(adapter);
         spinner.setSelection(getSelectedItem(adapter));
 
-        editText = view.findViewById(R.id.distance);
+        int progress = Integer.parseInt(QueryParamsUtils.getDistance(getActivity()));
+        label = view.findViewById(R.id.label_seekbar);
+        label.setText(getString(R.string.slider_label, progress));
+        seekBar = view.findViewById(R.id.seekBar);
+        seekBar.setOnSeekBarChangeListener(this);
+        seekBar.setProgress(progress);
 
         view.findViewById(R.id.searchButton).setOnClickListener(this);
+
     }
 
     @Override
     public void onClick(View v) {
         CharSequence spinnerItem = (CharSequence) spinner.getSelectedItem();
-        String distance = editText.getEditableText().toString();
-        if (!isValidDistance(distance)) {
-            showInvalidValuesToast();
-            return;
-        }
-
-        saveQueryParams(distance, spinnerItem.toString());
+        saveQueryParams(String.valueOf(seekBar.getProgress()), spinnerItem.toString());
         locationProvider.updateQueryParams(QueryParamsUtils.createQueryParamsFromLocation(
                 getActivity(),
                 locationProvider.getCurrentLocation()));
         dismiss();
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        label.setText(getString(R.string.slider_label, progress));
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
     }
 
     private int getSelectedItem(ArrayAdapter<CharSequence> adapter) {
@@ -86,20 +100,8 @@ public class NewQueryParamsDialogFragment extends DialogFragment implements View
         return 0;
     }
 
-    private void showInvalidValuesToast() {
-        Toast.makeText(getActivity(), R.string.invalid_distance_toast, Toast.LENGTH_LONG).show();
-    }
-
     private void saveQueryParams(String distance, String type) {
         QueryParamsUtils.saveTypeAndDistance(getActivity(), distance, type);
     }
 
-    private boolean isValidDistance(String distance) {
-        int intDistance = Integer.parseInt(distance);
-
-        if (intDistance > MAX_DISTANCE_IN_METERS || intDistance < MIN_DISTANCE_IN_METERS) {
-            return false;
-        }
-        return true;
-    }
 }
