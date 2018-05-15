@@ -137,7 +137,8 @@ public class DeviceLocationManagerImpl implements DeviceLocationManager {
             ActivityCompat.requestPermissions(activity,
                                               new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
                                               PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-            return;
+        } else {
+            requestLocationUpdates(activity.getApplicationContext());
         }
     }
 
